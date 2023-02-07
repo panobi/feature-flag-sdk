@@ -10,8 +10,8 @@ import (
 func main() {
 	//
 	// You can find your key in your Panobi workspace's integration settings.
-	// It's safer to load it from an environment variable than to paste it
-	// directly into this code; don't put secret keys in GitHub!
+	// It is safer to load it from an environment variable than to paste it
+	// directly into this code; do not put secret keys in GitHub.
 	//
 
 	k, err := panobi.ParseKey(os.Getenv("FEATURE_FLAG_SDK_SECRET_KEY"))
@@ -27,10 +27,16 @@ func main() {
 	client := panobi.CreateClient(k)
 
 	//
-	// Push a single event. The ExternalID identifies the feature flag. It can
-	// be an existing flag, or a new flag. It must be unique. Here we're
-	// the status of the flag to enabled, that is, the flag (or experiment) is
-	// on in your code, and users are being bucketed.
+	// Push a single event.
+	//
+	// The `ExternalID` identifies the feature flag. It can be an existing
+	// flag, or a new flag. It must be unique.
+	//
+	// Here we're updating the status of the flag to enabled, meaning it is
+	// live, and users are presumably being bucketed.
+	//
+	// You can also update the name of the flag and the flag's description.
+	// But the `ExternalID` is fixed.
 	//
 
 	event := panobi.Event{
