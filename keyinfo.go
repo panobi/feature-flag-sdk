@@ -5,11 +5,18 @@ import (
 	"strings"
 )
 
+// Holds information about a secret key.
 type KeyInfo struct {
-	K   string
-	WID string
+	K   string // actual key
+	WID string // workspace ID
 }
 
+// Parses the given string, and returns a KeyInfo structure holding the
+// component parts.
+//
+// You can find your key in your Panobi workspace's integration settings.
+// Keys are in the format `WID-K`, where WID is the workspace ID, and K
+// is actually the secret key generated for your integration.
 func ParseKey(input string) (*KeyInfo, error) {
 	parts := strings.Split(input, "-")
 	if len(parts) != 2 {
