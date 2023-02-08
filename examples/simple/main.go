@@ -16,7 +16,7 @@ func main() {
 
 	k, err := panobi.ParseKey(os.Getenv("FEATURE_FLAG_SDK_SECRET_KEY"))
 	if err != nil {
-		fmt.Printf("Error parsing key: %v\n", err)
+		fmt.Fprintln(os.Stderr, "Error parsing key:", err)
 		os.Exit(1)
 	}
 
@@ -25,6 +25,7 @@ func main() {
 	//
 
 	client := panobi.CreateClient(k)
+	defer client.Close()
 
 	//
 	// Push a single event.
@@ -45,7 +46,7 @@ func main() {
 	event.SetEnabled(true)
 
 	if err := client.SendEvent(event); err != nil {
-		fmt.Printf("Error sending events: %v\n", err)
+		fmt.Fprintln(os.Stderr, "Error sending event:", err)
 		os.Exit(1)
 	}
 }

@@ -6,6 +6,8 @@ const (
 	maxInputBytes   int = 1_048_576
 	maxChangeEvents int = 64
 
+	bufferedSendPeriod time.Duration = 10 * time.Second
+
 	defaultRetryAfter time.Duration = 1 * time.Second
 	maxRetries        int           = 2
 
