@@ -24,7 +24,7 @@ func ParseKey(input string) (*KeyInfo, error) {
 	}
 
 	wid := strings.TrimSpace(parts[0])
-	if wid == "" {
+	if len(wid) != idLen {
 		return nil, fmt.Errorf(errInvalidKey)
 	}
 
@@ -37,4 +37,13 @@ func ParseKey(input string) (*KeyInfo, error) {
 		K:   k,
 		WID: wid,
 	}, nil
+}
+
+// Test for equality against the given key information.
+func (ki *KeyInfo) Equals(other *KeyInfo) bool {
+	if other == nil {
+		return false
+	}
+
+	return ki.K == other.K && ki.WID == other.WID
 }

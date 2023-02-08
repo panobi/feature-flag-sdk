@@ -3,6 +3,8 @@ package panobi
 import "time"
 
 const (
+	idLen int = 22
+
 	maxInputBytes   int = 1_048_576
 	maxChangeEvents int = 64
 

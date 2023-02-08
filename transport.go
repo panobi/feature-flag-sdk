@@ -23,7 +23,7 @@ func createTransport(ki *KeyInfo) *transport {
 }
 
 func (t *transport) post(b []byte) error {
-	si, err := CalculateSignature(b, t.ki)
+	si, err := CalculateSignature(b, t.ki, nil)
 	if err != nil {
 		return err
 	}
