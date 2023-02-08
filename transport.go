@@ -3,8 +3,8 @@ package panobi
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -43,7 +43,7 @@ func (t *transport) post(b []byte) error {
 
 		defer func() {
 			if err := resp.Body.Close(); err != nil {
-				log.Printf("Error closing body: %s\n", err)
+				fmt.Fprintln(os.Stderr, "Error closing body:", err)
 			}
 		}()
 
