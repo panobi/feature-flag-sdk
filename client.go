@@ -71,6 +71,7 @@ func (client *client) startBufferedSender() {
 	ticker := time.NewTicker(bufferedSendPeriod)
 
 	go func() {
+		defer client.wg.Done()
 		defer ticker.Stop()
 
 		for {
