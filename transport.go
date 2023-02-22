@@ -3,6 +3,7 @@ package panobi
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -31,10 +32,10 @@ func createTransport(ki *KeyInfo) *transport {
 	}
 }
 
-func (t *transport) post(b []byte) error {
-	si, err := CalculateSignature(b, t.ki, nil)
+func (t *transport) post(input []byte) ([]byte, error) {
+	si, err := CalculateSignature(input, t.ki, nil)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	url := fmt.Sprintf("%s/%s", eventsURI, url.PathEscape(t.ki.ExternalID))
@@ -42,17 +43,17 @@ func (t *transport) post(b []byte) error {
 	i := 1
 
 	for {
-		err := func() error {
-			req, err := http.NewRequest("POST", url, bytes.NewReader(b))
+		b, err := func() ([]byte, error) {
+			req, err := http.NewRequest("POST", url, bytes.NewReader(input))
 			if err != nil {
-				return err
+				return nil, err
 			}
 
 			req.Header = t.getHeaders(si)
 
 			resp, err := t.c.Do(req)
 			if err != nil {
-				return err
+				return nil, err
 			}
 
 			defer func() {
@@ -63,22 +64,26 @@ func (t *transport) post(b []byte) error {
 
 			switch code := resp.StatusCode; {
 			case code >= 200 && code < 300:
-				return nil
+				return io.ReadAll(resp.Body)
 			case code == 408 || code == 429:
 				if i == attempts {
-					return fmt.Errorf("http error: %d", resp.StatusCode)
+					return nil, fmt.Errorf("http error: %d", resp.StatusCode)
 				}
 				time.Sleep(getRetryAfter(resp, backoff))
 				backoff = backoff * backoffMultiplier
 				i++
-				return nil
+				return nil, nil
 			default:
-				return fmt.Errorf("http error: %d", resp.StatusCode)
+				return nil, fmt.Errorf("http error: %d", resp.StatusCode)
 			}
 		}()
 
 		if err != nil {
-			return err
+			return nil, err
+		}
+
+		if b != nil {
+			return b, nil
 		}
 	}
 }
