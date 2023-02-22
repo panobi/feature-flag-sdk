@@ -11,15 +11,15 @@ const (
 
 // Holds information about a secret key.
 type KeyInfo struct {
-	K   string // actual key
-	WID string // workspace ID
+	K          string // actual key
+	ExternalID string // external ID
 }
 
 // Parses the given string, and returns a KeyInfo structure holding the
 // component parts.
 //
 // You can find your key in your Panobi workspace's integration settings.
-// Keys are in the format `WID-K`, where WID is the workspace ID, and K
+// Keys are in the format `E-K`, where E is the external ID, and K
 // is actually the secret key generated for your integration.
 func ParseKey(input string) (*KeyInfo, error) {
 	parts := strings.Split(input, "-")
@@ -27,8 +27,8 @@ func ParseKey(input string) (*KeyInfo, error) {
 		return nil, fmt.Errorf(errInvalidKey)
 	}
 
-	wid := strings.TrimSpace(parts[0])
-	if len(wid) != idLen {
+	externalID := strings.TrimSpace(parts[0])
+	if len(externalID) != idLen {
 		return nil, fmt.Errorf(errInvalidKey)
 	}
 
@@ -38,8 +38,8 @@ func ParseKey(input string) (*KeyInfo, error) {
 	}
 
 	return &KeyInfo{
-		K:   k,
-		WID: wid,
+		K:          k,
+		ExternalID: externalID,
 	}, nil
 }
 
@@ -49,5 +49,5 @@ func (ki *KeyInfo) Equals(other *KeyInfo) bool {
 		return false
 	}
 
-	return ki.K == other.K && ki.WID == other.WID
+	return ki.K == other.K && ki.ExternalID == other.ExternalID
 }
