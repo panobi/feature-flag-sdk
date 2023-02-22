@@ -10,6 +10,14 @@ import (
 	"time"
 )
 
+const (
+	eventsURI string = "http://panobi.com/integrations/flags/events"
+
+	attempts          int = 3
+	backoffInitial    int = 1
+	backoffMultiplier int = 2
+)
+
 type transport struct {
 	c  *http.Client
 	ki *KeyInfo
@@ -28,38 +36,49 @@ func (t *transport) post(b []byte) error {
 		return err
 	}
 
-	for i := 0; i < maxRetries; i++ {
-		req, err := http.NewRequest("POST", eventsURI, bytes.NewReader(b))
-		if err != nil {
-			return err
-		}
+	backoff := backoffInitial
+	i := 1
 
-		req.Header = t.getHeaders(si)
+	for {
+		err := func() error {
+			req, err := http.NewRequest("POST", eventsURI, bytes.NewReader(b))
+			if err != nil {
+				return err
+			}
 
-		resp, err := t.c.Do(req)
-		if err != nil {
-			return err
-		}
+			req.Header = t.getHeaders(si)
 
-		defer func() {
-			if err := resp.Body.Close(); err != nil {
-				fmt.Fprintln(os.Stderr, "Error closing body:", err)
+			resp, err := t.c.Do(req)
+			if err != nil {
+				return err
+			}
+
+			defer func() {
+				if err := resp.Body.Close(); err != nil {
+					fmt.Fprintln(os.Stderr, "Error closing body:", err)
+				}
+			}()
+
+			switch code := resp.StatusCode; {
+			case code >= 200 && code < 300:
+				return nil
+			case code == 408 || code == 429:
+				if i == attempts {
+					return fmt.Errorf("http error: %d", resp.StatusCode)
+				}
+				time.Sleep(getRetryAfter(resp, backoff))
+				backoff = backoff * backoffMultiplier
+				i++
+				return nil
+			default:
+				return fmt.Errorf("http error: %d", resp.StatusCode)
 			}
 		}()
 
-		switch code := resp.StatusCode; {
-		case code >= 200 && code < 300:
-			return nil
-		case code == 408:
-			time.Sleep(time.Duration(i+1) * time.Second)
-		case code == 429:
-			time.Sleep(getRetryAfter(resp))
-		default:
-			return fmt.Errorf("http error: %d", resp.StatusCode)
+		if err != nil {
+			return err
 		}
 	}
-
-	return fmt.Errorf("http error: too many retries")
 }
 
 func (t *transport) getHeaders(si *SignatureInfo) http.Header {
@@ -73,15 +92,15 @@ func (t *transport) getHeaders(si *SignatureInfo) http.Header {
 	return headers
 }
 
-func getRetryAfter(resp *http.Response) time.Duration {
+func getRetryAfter(resp *http.Response, defaultRetryAfter int) time.Duration {
 	headerVal := strings.TrimSpace(resp.Header.Get("Retry-After"))
 	if headerVal == "" {
-		return defaultRetryAfter
+		return time.Duration(defaultRetryAfter) * time.Second
 	}
 
 	retryAfter, err := strconv.ParseInt(headerVal, 10, 64)
 	if err != nil {
-		return defaultRetryAfter
+		return time.Duration(defaultRetryAfter) * time.Second
 	}
 
 	return time.Duration(retryAfter) * time.Second

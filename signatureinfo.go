@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+const (
+	maxInputBytes int = 1_048_576
+)
+
 // Holds information about a signature.
 type SignatureInfo struct {
 	S  string // the signature itself, calculated from a payload

@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+const (
+	idLen int = 22
+)
+
 // Holds information about a secret key.
 type KeyInfo struct {
 	K   string // actual key
