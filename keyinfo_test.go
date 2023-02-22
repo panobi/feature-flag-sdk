@@ -39,8 +39,8 @@ func Test_ParseKey(t *testing.T) {
 			testName: "success",
 			input:    "1234567890123456789012-def",
 			wantKeyInfo: &KeyInfo{
-				WID: "1234567890123456789012",
-				K:   "def",
+				ExternalID: "1234567890123456789012",
+				K:          "def",
 			},
 			wantErr: "",
 		},

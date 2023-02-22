@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	eventsURI string = "http://panobi.com/integrations/flags/events"
+	eventsURI string = "http://panobi.com/integrations/flags-sdk/events"
 
 	attempts          int = 3
 	backoffInitial    int = 1
@@ -36,12 +37,13 @@ func (t *transport) post(b []byte) error {
 		return err
 	}
 
+	url := fmt.Sprintf("%s/%s", eventsURI, url.PathEscape(t.ki.ExternalID))
 	backoff := backoffInitial
 	i := 1
 
 	for {
 		err := func() error {
-			req, err := http.NewRequest("POST", eventsURI, bytes.NewReader(b))
+			req, err := http.NewRequest("POST", url, bytes.NewReader(b))
 			if err != nil {
 				return err
 			}
@@ -87,7 +89,6 @@ func (t *transport) getHeaders(si *SignatureInfo) http.Header {
 	headers.Set("Content-Type", "application/json")
 	headers.Set("X-Panobi-Signature", si.S)
 	headers.Set("X-Panobi-Request-Timestamp", si.TS)
-	headers.Set("X-WID", t.ki.WID)
 
 	return headers
 }
