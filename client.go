@@ -58,7 +58,8 @@ func (client *client) SendEvents(events []Event) error {
 		return err
 	}
 
-	return client.t.post(b)
+	_, err = client.t.post(b)
+	return err
 }
 
 // Buffers an event so that it can be sent in a batch.
@@ -93,7 +94,7 @@ func (client *client) drain() {
 		})
 		switch err {
 		case nil:
-			postErr := client.t.post(b)
+			_, postErr := client.t.post(b)
 			if postErr != nil {
 				fmt.Fprintln(os.Stderr, "Error sending event:", postErr)
 			}
