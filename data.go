@@ -1,14 +1,9 @@
 package panobi
 
 type Event struct {
-	Description *string `json:"description,omitempty"`
-	ExternalID  string  `json:"externalID"`
-	IsEnabled   *bool   `json:"isEnabled,omitempty"`
-	Name        *string `json:"name,omitempty"`
-}
-
-func (event *Event) SetDescription(description string) {
-	event.Description = &description
+	ExternalID string  `json:"externalID"`
+	IsEnabled  *bool   `json:"isEnabled,omitempty"`
+	Name       *string `json:"name,omitempty"`
 }
 
 func (event *Event) SetEnabled(isEnabled bool) {
