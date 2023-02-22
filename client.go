@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+const (
+	maxChangeEvents    int           = 64
+	bufferedSendPeriod time.Duration = 10 * time.Second
+)
+
 // Client for pushing feature flag events to your Panobi workspace.
 type client struct {
 	t    *transport
