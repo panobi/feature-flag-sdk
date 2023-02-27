@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	eventsURI string = "https://panobi.com/integrations/flags-sdk/events"
+	eventsURI string = "http://panobi.com/integrations/flags-sdk/events"
 
 	attempts          int = 3
 	backoffInitial    int = 1
@@ -38,7 +38,11 @@ func (t *transport) post(input []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	url := fmt.Sprintf("%s/%s", eventsURI, url.PathEscape(t.ki.ExternalID))
+	url := fmt.Sprintf(
+		"%s/%s/%s",
+		eventsURI,
+		url.PathEscape(t.ki.WorkspaceID),
+		url.PathEscape(t.ki.ExternalID))
 	backoff := backoffInitial
 	i := 1
 
