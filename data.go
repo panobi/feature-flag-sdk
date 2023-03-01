@@ -1,9 +1,10 @@
 package panobi
 
 type Event struct {
-	ExternalID string  `json:"externalID"`
-	IsEnabled  *bool   `json:"isEnabled,omitempty"`
-	Name       *string `json:"name,omitempty"`
+	Project   string  `json:"project"`
+	Key       string  `json:"key"`
+	IsEnabled *bool   `json:"isEnabled,omitempty"`
+	Name      *string `json:"name,omitempty"`
 }
 
 func (event *Event) SetEnabled(isEnabled bool) {

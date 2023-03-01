@@ -50,7 +50,7 @@ func main() {
 				continue
 			}
 
-			if strings.TrimSpace(event.ExternalID) != "" {
+			if strings.TrimSpace(event.Project) != "" && strings.TrimSpace(event.Key) != "" {
 				client.SendEventBuffered(event)
 			}
 		}

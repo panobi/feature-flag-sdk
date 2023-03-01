@@ -41,7 +41,8 @@ func main() {
 	//
 
 	event := panobi.Event{
-		ExternalID: "slackbot-greeting",
+		Project: "growth-team",
+		Key:     "slackbot-greeting",
 	}
 	event.SetEnabled(true)
 
