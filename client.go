@@ -22,7 +22,7 @@ type client struct {
 }
 
 // Creates a new client with the given key information.
-func CreateClient(k *KeyInfo) *client {
+func CreateClient(k KeyInfo) *client {
 	c := &client{
 		t:    createTransport(k),
 		q:    make(chan Event, maxChangeEvents),

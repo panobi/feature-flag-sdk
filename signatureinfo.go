@@ -21,9 +21,9 @@ type SignatureInfo struct {
 // Calculates a signature for the given byte payload, using the given key
 // information. The events endpoint requires that you include the calculated
 // signature and timestamp when making requests.
-func CalculateSignature(b []byte, ki *KeyInfo, now *time.Time) (*SignatureInfo, error) {
+func CalculateSignature(b []byte, ki KeyInfo, now *time.Time) (SignatureInfo, error) {
 	if len(b) > maxInputBytes {
-		return nil, fmt.Errorf(errMaxNumberSize, "input", maxInputBytes, "bytes")
+		return SignatureInfo{}, fmt.Errorf(errMaxNumberSize, "input", maxInputBytes, "bytes")
 	}
 
 	var ts string
@@ -39,17 +39,13 @@ func CalculateSignature(b []byte, ki *KeyInfo, now *time.Time) (*SignatureInfo, 
 	mac.Write([]byte(message))
 	signature := "v0=" + string(hex.EncodeToString(mac.Sum(nil)))
 
-	return &SignatureInfo{
+	return SignatureInfo{
 		S:  signature,
 		TS: ts,
 	}, nil
 }
 
 // Test for equality against the given signature information.
-func (si *SignatureInfo) Equals(other *SignatureInfo) bool {
-	if other == nil {
-		return false
-	}
-
+func (si SignatureInfo) Equals(other SignatureInfo) bool {
 	return si.S == other.S && si.TS == other.TS
 }

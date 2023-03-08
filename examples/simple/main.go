@@ -30,14 +30,16 @@ func main() {
 	//
 	// Push a single event.
 	//
-	// The `ExternalID` identifies the feature flag. It can be an existing
-	// flag, or a new flag. It must be unique.
+	// The `Project` is a way to namespace flags. It can be the project
+	// you're working on, or the team you're on, or it can be empty.
+	//
+	// The `Key` identifies the feature flag. It can be a new flag, or an
+	// existing flag. If it is new, then it will be inserted; if it is an
+	// existing flag, then it will be updated. The key must be unique within
+	// the `Project`.
 	//
 	// Here we're updating the status of the flag to enabled, meaning it is
-	// live, and users are presumably being bucketed.
-	//
-	// You can also update the name of the flag and the flag's description.
-	// But the `ExternalID` is fixed.
+	// live.
 	//
 
 	event := panobi.Event{
