@@ -22,10 +22,10 @@ const (
 
 type transport struct {
 	c  *http.Client
-	ki *KeyInfo
+	ki KeyInfo
 }
 
-func createTransport(ki *KeyInfo) *transport {
+func createTransport(ki KeyInfo) *transport {
 	return &transport{
 		c:  &http.Client{},
 		ki: ki,
@@ -92,7 +92,7 @@ func (t *transport) post(input []byte) ([]byte, error) {
 	}
 }
 
-func (t *transport) getHeaders(si *SignatureInfo) http.Header {
+func (t *transport) getHeaders(si SignatureInfo) http.Header {
 	headers := make(http.Header)
 
 	headers.Set("Content-Type", "application/json")
