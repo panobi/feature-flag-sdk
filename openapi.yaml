@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Panobi Feature Flag API
+  version: '1.0'
+  description: OpenAPI spec for Panobi Feature Flags.
+servers:
+  - url: 'https://panobi.com'
+    description: Panobi
+paths:
+  /integrations/flags-sdk/events:
+    post:
+      summary: Push feature flag events to Panobi
+      operationId: post-integrations-flags-sdk-events
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/ResponseError'
+        '500':
+          $ref: '#/components/responses/ResponseError'
+      requestBody:
+        description: Change events
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestFlagsSDKChangeEvents'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Panobi-Signature
+          description: Signature for the request
+          example: v0=04927f68e9b82341e00b869aad762c4525c91d2d830afe0e133332c0eb5d0c6e
+        - schema:
+            type: string
+          in: header
+          name: X-Panobi-Request-Timestamp
+          description: Timestamp in unix milliseconds
+          example: '1678319603312'
+components:
+  schemas:
+    ObjectErrorMessage:
+      title: ErrorMessage
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    RequestFlagsSDKChangeEvents:
+      title: RequestFlagsSDKChangeEvents
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            type: object
+            properties:
+              project:
+                type: string
+              key:
+                type: string
+              name:
+                type: string
+              isEnabled:
+                type: boolean
+            required:
+              - project
+              - key
+      required:
+        - events
+      example:
+        events:
+          - project: growth-team
+            key: slackbot-greeting
+            isEnabled: true
+    ResponseError:
+      title: ResponseError
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/ObjectErrorMessage'
+      required:
+        - error
+  responses:
+    ResponseError:
+      description: A standard error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseError'
