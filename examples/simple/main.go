@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	panobi "github.com/panobi/feature-flag-sdk"
 )
@@ -43,8 +44,9 @@ func main() {
 	//
 
 	event := panobi.Event{
-		Project: "growth-team",
-		Key:     "slackbot-greeting",
+		Project:      "growth-team",
+		Key:          "slackbot-greeting",
+		DateModified: time.Now(),
 	}
 	event.SetEnabled(true)
 

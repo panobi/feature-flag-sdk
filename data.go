@@ -1,10 +1,13 @@
 package panobi
 
+import "time"
+
 type Event struct {
-	Project   string  `json:"project"`
-	Key       string  `json:"key"`
-	IsEnabled *bool   `json:"isEnabled,omitempty"`
-	Name      *string `json:"name,omitempty"`
+	Project      string    `json:"project"`
+	Key          string    `json:"key"`
+	DateModified time.Time `json:"dateModified"`
+	IsEnabled    *bool     `json:"isEnabled,omitempty"`
+	Name         *string   `json:"name,omitempty"`
 }
 
 func (event *Event) SetEnabled(isEnabled bool) {
