@@ -25,12 +25,17 @@ TODO: Use the provided OpenAPI specification. You can send events to Panobi over
 You will need your secret key, which you can copy from the integration settings in your Panobi workspace. The example programs expect the secret key in the form of an environment variable.
 
 ```console
-cd examples/simple
 export FEATURE_FLAG_SDK_SECRET_KEY=<your secret key>
+```
+
+The simple example is a good place to start.
+
+```console
+cd examples/simple
 go run main.go
 ```
 
-The simple example is a good place to start. Roughly, it works as follows.
+Roughly, it works as follows.
 
 1. Reads the enviroment variable and parses your key.
 2. Creates a client with the parsed key.
