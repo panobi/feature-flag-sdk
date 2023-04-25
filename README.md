@@ -4,7 +4,7 @@
 
 This purpose of this SDK is to push feature flag changes to your Panobi workspace. It is aimed at customers using feature flag systems that are not already supported by the Panobi integrations for LaunchDarkly, Split, and so forth. If you use an in-house feature flag system, then this SDK is for you.
 
-The SDK is based on events. Each event represents changes to a flag, including the flag state -- enabled or disabled -- and the name of the flag. Events can sent one-by-one, or in batches, up to some maximum number (currently 64).
+The SDK is based on events. Each event represents changes to a flag, including the flag state -- enabled or disabled -- and the name of the flag. Events can sent one-by-one, or in batches, up to some maximum number of events per batch (currently 64).
 
 ## Compatibility
 
@@ -22,10 +22,10 @@ TODO: Use the provided OpenAPI specification. You can send events to Panobi over
 
 ## Running the example programs
 
-You will need your secret key, which you can copy from the integration settings in your Panobi workspace. The example programs expect the secret key in the form of an environment variable.
+You will need your signing key, which you can copy from the integration settings in your Panobi workspace. The example programs expect the signing key in the form of an environment variable.
 
 ```console
-export FEATURE_FLAG_SDK_SECRET_KEY=<your secret key>
+export FEATURE_FLAG_SDK_SIGNING_KEY=<your signing key>
 ```
 
 The simple example is a good place to start.

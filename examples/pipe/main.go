@@ -15,10 +15,10 @@ func main() {
 	//
 	// You can find your key in your Panobi workspace's integration settings.
 	// It is safer to load it from an environment variable than to paste it
-	// directly into this code; do not put secret keys in GitHub.
+	// directly into this code; do not put secrets in GitHub.
 	//
 
-	k, err := panobi.ParseKey(os.Getenv("FEATURE_FLAG_SDK_SECRET_KEY"))
+	k, err := panobi.ParseKey(os.Getenv("FEATURE_FLAG_SDK_SIGNING_KEY"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error parsing key:", err)
 		os.Exit(1)

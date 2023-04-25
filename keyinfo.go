@@ -9,7 +9,7 @@ const (
 	idLen int = 22
 )
 
-// Holds information about a secret key.
+// Holds information about a signing key.
 type KeyInfo struct {
 	K           string // actual key
 	WorkspaceID string // workspace ID
