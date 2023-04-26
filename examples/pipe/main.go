@@ -25,7 +25,7 @@ func main() {
 	}
 
 	//
-	// Create a client with the secret key information.
+	// Create a client with the signing key information.
 	//
 
 	client := panobi.CreateClient(k)

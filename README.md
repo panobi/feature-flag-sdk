@@ -14,7 +14,7 @@ The source files were written against [Go 1.18](https://go.dev/doc/go1.18). They
 
 ## Getting started
 
-The quickest way to get up and running is to run the provided [example programs](#running-the-example-programs). These programs demonstrate how to construct events and send them to Panobi. 
+The quickest way to get up and running is to run the provided [example programs](#running-the-example-programs), which demonstrate one method for constructing events and sending them to Panobi.
 
 TODO: Integrate your in-house applications.
 
