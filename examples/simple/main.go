@@ -45,9 +45,13 @@ func main() {
 
 	event := panobi.Event{
 		Project:      "growth-team",
-		Key:          "slackbot-greeting",
+		Key:          "beta-feature-xyz",
 		DateModified: time.Now(),
 	}
+
+	// `Name` is a human-readable name for the feature flag that will
+	// show up in the Panobi UI.
+	event.SetName("Beta Feature XYZ")
 	event.SetEnabled(true)
 
 	if err := client.SendEvent(event); err != nil {

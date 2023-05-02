@@ -52,6 +52,7 @@ func main() {
 
 			if strings.TrimSpace(event.Project) != "" && strings.TrimSpace(event.Key) != "" {
 				client.SendEventBuffered(event)
+				fmt.Fprintln(os.Stderr, "Successfully sent event!")
 			}
 		}
 
