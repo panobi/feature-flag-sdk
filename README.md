@@ -2,9 +2,15 @@
 
 ## Overview
 
-This purpose of this SDK is to push feature flag changes to your Panobi workspace. It is aimed at customers using feature flag systems that are not already supported by the Panobi integrations for LaunchDarkly, Split, and so forth. If you use an in-house feature flag system, then this SDK is for you.
+This SDK lets you push feature flag changes to your Panobi workspace, so that release statuses will update automatically and make it easier to interpret changes to your top-line metrics.
 
-The SDK is based on events. Each event represents changes to a flag, including the flag state -- enabled or disabled -- and the name of the flag. Events can sent one-by-one, or in batches, up to some maximum number of events per batch (currently 64).
+## Who is it for?
+
+If you use an in-house feature flag system, you’re in the right place. This SDK doesn’t enable integration with third-party services like LaunchDarkly, Split, and Statsig (see Panobi’s custom integrations for those).
+
+## How does it work?
+
+The SDK is based on events. Each event represents changes to a flag, like the flag state — enabled or disabled — and the name of the flag. Events can be sent one at a time or in batches of up to 64.
 
 ## Compatibility
 
