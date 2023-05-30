@@ -3,13 +3,13 @@ package panobi
 import (
 	"encoding/json"
 	"fmt"
-	"os"
+	"log"
 	"sync"
 	"time"
 )
 
 const (
-	maxChangeEvents    int           = 64
+	MaxChangeEvents    int           = 64
 	bufferedSendPeriod time.Duration = 10 * time.Second
 )
 
@@ -25,7 +25,7 @@ type client struct {
 func CreateClient(k KeyInfo) *client {
 	c := &client{
 		t:    createTransport(k),
-		q:    make(chan Event, maxChangeEvents),
+		q:    make(chan Event, MaxChangeEvents),
 		done: make(chan bool),
 	}
 
@@ -47,8 +47,8 @@ func (client *client) SendEvent(event Event) error {
 
 // Sends multiple feature flag events to your Panobi workspace.
 func (client *client) SendEvents(events []Event) error {
-	if len(events) > maxChangeEvents {
-		return fmt.Errorf(errMaxNumberSize, "batch", maxChangeEvents, "events")
+	if len(events) > MaxChangeEvents {
+		return fmt.Errorf(errMaxNumberSize, "batch", MaxChangeEvents, "events")
 	}
 
 	b, err := json.Marshal(&ChangeEvents{
@@ -97,10 +97,10 @@ func (client *client) drain() {
 		case nil:
 			_, postErr := client.t.post(b)
 			if postErr != nil {
-				fmt.Fprintln(os.Stderr, "Error sending event:", postErr)
+				log.Print("Error sending event:", postErr)
 			}
 		default:
-			fmt.Fprintln(os.Stderr, "Error marshalling event:", err)
+			log.Print("Error marshalling event:", err)
 		}
 	}
 }

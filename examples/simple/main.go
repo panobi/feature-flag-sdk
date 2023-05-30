@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -17,8 +17,7 @@ func main() {
 
 	k, err := panobi.ParseKey(os.Getenv("FEATURE_FLAG_SDK_SIGNING_KEY"))
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error parsing key:", err)
-		os.Exit(1)
+		log.Fatal("Error parsing key:", err)
 	}
 
 	//
@@ -55,7 +54,6 @@ func main() {
 	event.SetEnabled(true)
 
 	if err := client.SendEvent(event); err != nil {
-		fmt.Fprintln(os.Stderr, "Error sending event:", err)
-		os.Exit(1)
+		log.Fatal("Error sending event:", err)
 	}
 }
