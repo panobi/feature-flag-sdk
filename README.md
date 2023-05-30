@@ -34,6 +34,8 @@ You will need your signing key, which you can copy from the integration settings
 export FEATURE_FLAG_SDK_SIGNING_KEY=<your signing key>
 ```
 
+### Simple
+
 The simple example is a good place to start.
 
 ```console
@@ -49,6 +51,45 @@ Roughly, it works as follows.
 4. Sends the event to Panobi.
 
 Once the event has been successfully sent, it is available for use in your Panobi workspace. You should be able to select it from a drop-down menu in the editor panel for any Release. One selected, the state of the flag will be reflected in the Release. For example, if the flag is enabled, then the Release will be marked as Live, and moved into the appropriate column inside Panobi. If the flag is then  disabled via a subsequent event, the Release will be marked as Complete.
+
+### CSV
+
+This example program demonstrates how to send more than one event at a time. It will read a file of comma-separated values, where each line represents one event. If your feature flag system offers an export to CSV, then this is a great way to populate your existing flags in your Panobi workspace.
+
+```console
+cd examples/csv
+go run main.go
+```
+
+Each row is in the following format:
+
+```
+Project, Key, DateModified, IsEnabled, Name
+```
+
+Where the last two columns are optional and can be omitted.
+
+The following are all examples of valid rows:
+
+```
+growth-team,beta-feature-xyz,2023-03-10T17:27:55+00:00,true,Beta Feature XYZ
+growth-team,beta-feature-abc,2023-03-10T17:30:55+00:00
+```
+
+### JSON
+
+This example program works like the CSV example, but reads events in JSON format.
+
+```console
+cd examples/json
+go run main.go
+```
+
+The following is an example of a valid row:
+
+```json
+{"project": "growth-team", "key": "beta-feature-xyz", "name": "Beta Feature XYZ", "dateModified": "2023-03-10T17:27:55+00:00", "isEnabled": true}
+```
 
 ## License
 
