@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
+	"log"
 	"os"
 	"strings"
 	"sync"
@@ -20,8 +20,7 @@ func main() {
 
 	k, err := panobi.ParseKey(os.Getenv("FEATURE_FLAG_SDK_SIGNING_KEY"))
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error parsing key:", err)
-		os.Exit(1)
+		log.Fatal("Error parsing key:", err)
 	}
 
 	//
@@ -46,18 +45,18 @@ func main() {
 		for scanner.Scan() {
 			var event panobi.Event
 			if err := json.Unmarshal(scanner.Bytes(), &event); err != nil {
-				fmt.Fprintln(os.Stderr, "Error parsing JSON:", err)
+				log.Print("Error parsing JSON:", err)
 				continue
 			}
 
 			if strings.TrimSpace(event.Project) != "" && strings.TrimSpace(event.Key) != "" {
 				client.SendEventBuffered(event)
-				fmt.Println("Successfully sent event!")
+				log.Printf(`Successfully queued update to "%s"\n`, event.Key)
 			}
 		}
 
 		if err := scanner.Err(); err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading input:", err)
+			log.Print("Error reading input:", err)
 		}
 	}()
 
