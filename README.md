@@ -22,6 +22,8 @@ The source files were written against [Go 1.18](https://go.dev/doc/go1.18). They
 
 The quickest way to get up and running is to run the provided [example programs](#running-the-example-programs), which demonstrate one method for constructing events and sending them to Panobi.
 
+If you’re running into an alert in Panobi that no flags can be found, [try running the CSV program](https://github.com/panobi/feature-flag-sdk#csv); this will help you push your feature flags into Panobi before the regularly scheduled push associated with your SDK.
+
 TODO: Integrate your in-house applications.
 
 TODO: Use the provided OpenAPI specification. You can send events to Panobi over HTTP from the language or tool of your choice.
@@ -54,7 +56,7 @@ Once the event has been successfully sent, it is available for use in your Panob
 
 ### CSV
 
-This example program demonstrates how to send more than one event at a time. It will read a file of comma-separated values, where each line represents one event. If your feature flag system offers an export to CSV, then this is a great way to populate your existing flags in your Panobi workspace.
+This example program demonstrates how to send more than one event at a time. It will read a file of comma-separated values, where each line represents one event. If your feature flag system offers an export to CSV, then this is a great way to populate those flags in your Panobi workspace.
 
 ```console
 cd examples/csv
