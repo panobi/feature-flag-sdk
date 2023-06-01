@@ -128,6 +128,8 @@ curl -v \
 
 ## License
 
+This SDK is provided under the terms of the [Apache License 2.0](./LICENSE).
+
 ## About Panobi
 
 The platform designed for growth teams.
