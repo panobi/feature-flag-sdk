@@ -100,23 +100,26 @@ Once you've built a request according to the specification, you need to sign it 
 ```shell
 #!/usr/bin/env bash
 
-# Assume the request body is in a file, and the filename is the first argument to this script.
+# We read the request body from a file, so that we can generate a signature for
+# it. The first argument to this script is the name of that file.
 input=$(<"$1")
 
-# Now split the signing key into its component parts.
+# Split the signing key into its component parts.
 arr=(${FEATURE_FLAG_SDK_SIGNING_KEY//-/ })
-wid=${arr[0]} # Workspace ID
-eid=${arr[1]} # External ID
+wid=${arr[0]}    # Workspace ID
+eid=${arr[1]}    # External ID
 secret=${arr[2]} # Secret
 
-# Get the unix epoch in milliseconds. We'll use this as a timestamp for the signature.
+# Get the milliseconds since Unix epoch. We'll use this as a timestamp for the
+# signature.
 ts=$(date +%s)000
 
-# Hash the timestamp and the request using the secret part of your signing key.
+# Hash the timestamp and the request body using the secret part of the signing
+# key.
 msg="v0:${ts}:${input}"
 sig=$(echo -n "${msg}" | openssl dgst -sha256 -hmac "${secret}")
 
-# Post the headers and the request to Panobi using CURL.
+# Post the headers and the request to Panobi using good ol' curl.
 curl -v \
     -X POST \
     -H "X-Panobi-Signature: v0=""${sig}" \
@@ -128,7 +131,7 @@ curl -v \
 
 ## License
 
-This SDK is provided under the terms of the [Apache License 2.0](./LICENSE).
+This SDK is provided under the terms of the [Apache License 2.0](LICENSE).
 
 ## About Panobi
 
