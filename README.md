@@ -20,13 +20,11 @@ The source files were written against [Go 1.18](https://go.dev/doc/go1.18). They
 
 ## Getting started
 
-The quickest way to get up and running is to run the provided [example programs](#running-the-example-programs), which demonstrate one method for constructing events and sending them to Panobi.
+The quickest way to get up and running is to run the provided [example programs](#running-the-example-programs), which demonstrate how to construct events and send them to Panobi.
 
-If you’re running into an alert in Panobi that no flags can be found, [try running the CSV program](https://github.com/panobi/feature-flag-sdk#csv); this will help you push your feature flags into Panobi before the regularly scheduled push associated with your SDK.
+If you’re running into an alert in Panobi that no flags can be found, [try running the CSV program](#csv); this will help you push your feature flags into Panobi before the regularly scheduled push associated with your SDK.
 
-TODO: Integrate your in-house applications.
-
-TODO: Use the provided OpenAPI specification. You can send events to Panobi over HTTP from the language or tool of your choice.
+If you're using a language other than Golang, or you'd rather roll-your-own, then take a look at how to send flags to us via [OpenAPI](#openapi).
 
 ## Running the example programs
 
@@ -92,6 +90,18 @@ The following is an example of a valid row:
 ```json
 {"project": "growth-team", "key": "beta-feature-xyz", "name": "Beta Feature XYZ", "dateModified": "2023-03-10T17:27:55+00:00", "isEnabled": true}
 ```
+
+## OpenAPI
+
+In an effort to be language agnostic, we've provided an [OpenAPI specification](openapi.yaml) that you can use to push events directly to Panobi.
+
+1. You will need your signing key, which is available in the integration settings in Panobi.
+2. Your key has three components, separated by dashes: `W-E-K`. You will need the `W` and `E` components to construct the URL in a later step, while K is the secret you will used to sign the request.
+3. Construct a request body in JSON using the `RequestFlagsSDKChangeEvents` schema described in the [specification](openapi.yaml).
+4. Sign the request body using component K from your signing key and a timestamp. The method for signing is demonstrated in [CalculateSignature()](signatureinfo.go).
+5. Set your headers. `X-Panobi-Signature` and `X-Panobi-Request-Timestamp` should contain the signature and timestamp from step (4), respectively. The `Content-Type` should be `application/json`.
+6. Send the headers and request body to `https://panobi.com/integrations/flags-sdk/events/{W}/{E}` in the language or tool of your choice.
+7. Check for errors!
 
 ## License
 
