@@ -95,13 +95,36 @@ The following is an example of a valid row:
 
 In an effort to be language agnostic, we've provided an [OpenAPI specification](openapi.yaml) that you can use to push events directly to Panobi.
 
-1. You will need your signing key, which is available in the integration settings in Panobi.
-2. Your key has three components, separated by dashes: `W-E-K`. You will need the `W` and `E` components to construct the URL in a later step, while K is the secret you will used to sign the request.
-3. Construct a request body in JSON using the `RequestFlagsSDKChangeEvents` schema described in the [specification](openapi.yaml).
-4. Sign the request body using component K from your signing key and a timestamp. The method for signing is demonstrated in [CalculateSignature()](signatureinfo.go).
-5. Set your headers. `X-Panobi-Signature` and `X-Panobi-Request-Timestamp` should contain the signature and timestamp from step (4), respectively. The `Content-Type` should be `application/json`.
-6. Send the headers and request body to `https://panobi.com/integrations/flags-sdk/events/{W}/{E}` in the language or tool of your choice.
-7. Check for errors!
+Once you've built a request according to the specification, you need to sign it so that Panobi knows it's from you. The following little shell script demonstrates how to do this.
+
+```shell
+#!/usr/bin/env bash
+
+# Assume the request body is in a file, and the filename is the first argument to this script.
+input=$(<"$1")
+
+# Now split the signing key into its component parts.
+arr=(${FEATURE_FLAG_SDK_SIGNING_KEY//-/ })
+wid=${arr[0]} # Workspace ID
+eid=${arr[1]} # External ID
+secret=${arr[2]} # Secret
+
+# Get the unix epoch in milliseconds. We'll use this as a timestamp for the signature.
+ts=$(date +%s)000
+
+# Hash the timestamp and the request using the secret part of your signing key.
+msg="v0:${ts}:${input}"
+sig=$(echo -n "${msg}" | openssl dgst -sha256 -hmac "${secret}")
+
+# Post the headers and the request to Panobi using CURL.
+curl -v \
+    -X POST \
+    -H "X-Panobi-Signature: v0=""${sig}" \
+    -H "X-Panobi-Request-Timestamp: ""${ts}" \
+    -H "Content-Type: application/json" \
+    -d "${input}" \
+    https://panobi.com/integrations/flags-sdk/events/"${wid}"/"${eid}"
+```
 
 ## License
 
