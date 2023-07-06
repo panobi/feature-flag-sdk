@@ -2,7 +2,7 @@
 
 ## Overview
 
-This SDK lets you push feature flag changes to your Panobi workspace, so that release statuses will update automatically and make it easier to interpret changes to your top-line metrics.
+This SDK lets you push feature flag changes from your custom release management system to your Panobi workspace, so that release statuses will update automatically and make it easier to interpret changes to your top-line metrics.
 
 ## Who is it for?
 
