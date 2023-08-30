@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	eventsURI string = "https://panobi.com/integrations/flags-sdk/events"
+	eventsURI string = "https://app.panobi.com/integrations/flags-sdk/events"
 
 	attempts          int = 3
 	backoffInitial    int = 1
