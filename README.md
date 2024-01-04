@@ -50,7 +50,7 @@ Roughly, it works as follows.
 3. Constructs an event representing an enabled feature flag.
 4. Sends the event to Panobi.
 
-Once the event has been successfully sent, it is available for use in your Panobi workspace. You should be able to select it from a drop-down menu in the editor panel for any Project. One selected, the state of the flag will be reflected in the Project. For example, if the flag is enabled, then the Project will be marked as Live, and moved into the appropriate column inside Panobi. If the flag is then  disabled via a subsequent event, the Project will be marked as Complete.
+Once the event has been successfully sent, it is available for use in your Panobi workspace. You should be able to select it from a drop-down menu in the editor panel for any Project. Once selected, the state of the flag will be reflected in the Project. For example, if the flag is enabled, then the Project will be marked as Live, and moved into the appropriate column inside Panobi. If the flag is then  disabled via a subsequent event, the Project will be marked as Complete.
 
 ### CSV
 
